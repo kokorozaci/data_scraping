@@ -18,7 +18,7 @@ import pandas as pd
 from pandas.io.json import json_normalize
 
 
-class VacanciesScraper:
+class VacancyScraper:
     header = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                             'Chrome/81.0.4044.129 Safari/537.36',
               'Accept': '*/*'}
@@ -172,7 +172,7 @@ if __name__ == '__main__':
     else:
         vacancy = input('Введите запрос для поиска вакансий: ')
         page = input('Введите число страниц зля отображения (все: -1): ')
-    data = VacanciesScraper.get_vacancy(vacancy, page)
+    data = VacancyScraper.get_vacancy(vacancy, page)
     pprint(data[-5:])  # не все строки, для наглядноси
     df = json_normalize(data)  # не очень красиво получается распечатывать
     pd.set_option('display.max_columns', None)
