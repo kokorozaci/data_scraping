@@ -139,11 +139,11 @@ class VacanciesScraper:
         return vacancy_list, has_next
 
     @classmethod
-    def get_vacancy(cls, text):
+    def get_vacancy(cls, text, page):
         i = 0
         vacancy, next_page = cls.parse_hh(text, i)
         all = vacancy
-        while next_page:
+        while next_page and (i+1) != page:
             i += 1
             vacancy, next_page = cls.parse_hh(text, i)
             all.extend(vacancy)
@@ -152,7 +152,7 @@ class VacanciesScraper:
         i = 1
         vacancy, next_page = cls.parse_superjob(text, i)
         all.extend(vacancy)
-        while next_page:
+        while next_page and i != page:
             i += 1
             vacancy, next_page = cls.parse_superjob(text, i)
             all.extend(vacancy)
@@ -164,14 +164,17 @@ class VacanciesScraper:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--vacancy", type=str)
+    parser.add_argument("-p", "--page", type=str)
     args = parser.parse_args()
     if args.vacancy:
         vacancy = args.vacancy
+        page = args.page
     else:
         vacancy = input('Введите запрос для поиска вакансий: ')
-    data = VacanciesScraper.get_vacancy(vacancy)
-    pprint(data[-5:])
-    df = json_normalize(data)  # не очень наглядно получается
+        page = input('Введите число страниц зля отображения (все: -1): ')
+    data = VacanciesScraper.get_vacancy(vacancy, page)
+    pprint(data[-5:])  # не все строки, для наглядноси
+    df = json_normalize(data)  # не очень красиво получается распечатывать
     pd.set_option('display.max_columns', None)
     print(df.head())
     print(f'Всего вакансий: {len(data)}')
