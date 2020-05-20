@@ -72,7 +72,7 @@ class VacancyScraper:
             has_next_page = page_block.find(text='Дальше')
         else:
             has_next_page = None
-        vacancy_block = soup.find_all('div', {'class': 'iJCa5 _2gFpt _1znz6 _2nteL'})
+        vacancy_block = soup.find_all('div', {'class': 'iJCa5 f-test-vacancy-item _1fma_ _1JhPh _2gFpt _1znz6 _2nteL'})
         return vacancy_block, has_next_page
 
     @classmethod
@@ -97,6 +97,7 @@ class VacancyScraper:
 
             link = vacancy.find('a', {'data-qa': 'vacancy-serp__vacancy-title'})['href']
             vacancy_data['link'] = link[:link.index('?')]
+            vacancy_data['_id'] = 'h' + vacancy_data['link'].split('https://hh.ru/vacancy/')[1]
             vacancy_data['source'] = 'hh.ru'
             employer = vacancy.find('a', {'data-qa': 'vacancy-serp__vacancy-employer'})
             if employer:
@@ -115,7 +116,7 @@ class VacancyScraper:
         vacancy_list = []
         for vacancy in vacancy_block:
             vacancy_data = {}
-            name = vacancy.find('a', {'class': '_1UJAN'})
+            name = vacancy.find('div', {'class': '_3mfro CuJz5 PlM3e _2JVkc _3LJqf'})
             if name:
                 vacancy_data['name'] = name.getText()
             else:
@@ -128,6 +129,7 @@ class VacancyScraper:
                 vacancy_data['salary_min'], vacancy_data['salary_max'], vacancy_data['currency'] = None, None, None
 
             vacancy_data['link'] = cls.link_superjob + vacancy.find('a', {'class': '_1UJAN'})['href']
+            vacancy_data['_id'] = 's' + vacancy_data['link'][-13:-5]
             vacancy_data['source'] = 'superjob.ru'
             employer = vacancy.find('a', {'class': '_25-u7'})
             if employer:
@@ -171,7 +173,7 @@ if __name__ == '__main__':
         page = args.page
     else:
         vacancy = input('Введите запрос для поиска вакансий: ')
-        page = int(input('Введите число страниц для отображения (все: -1): '))
+        page = input('Введите число страниц зля отображения (все: -1): ')
     data = VacancyScraper.get_vacancy(vacancy, page)
     pprint(data[-5:])  # не все строки, для наглядноси
     df = json_normalize(data)  # не очень красиво получается распечатывать
