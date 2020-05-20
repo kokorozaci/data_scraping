@@ -27,10 +27,15 @@ else:
     page = int(input('Введите число страниц для отображения (все: -1): '))
 
 data = vs.get_vacancy(vacancy, page)
-for dat in data:
-    if dat['source'] == 'superjob.ru' and not sj.find_one({"_id": dat['_id']}):
-        sj.insert_one(dat)
-    elif dat['source'] == 'hh.ru' and not hh.find_one({"_id": dat['_id']}):
-        hh.insert_one(dat)
 
+
+def insert_new(data):
+    for dat in data:
+        if dat['source'] == 'superjob.ru' and not sj.find_one({"_id": dat['_id']}):
+            sj.insert_one(dat)
+        elif dat['source'] == 'hh.ru' and not hh.find_one({"_id": dat['_id']}):
+            hh.insert_one(dat)
+
+
+insert_new(data)
 print(len(list(hh.find({}))))

@@ -20,14 +20,22 @@ if args.salary:
 else:
     salary = int(input('Введите мин з/п: '))
 
-for i in hh.find({'$or': [{'salary_min': {'$gte': salary}}, {'salary_max': {'$gte': salary}}]},
-                 {'name': 1, 'salary_min': 1, 'salary_max': 1, 'currency': 1, '_id': 0}):
 
-    print(f"{i['name']}: {i['salary_min'] if i['salary_min'] else ''} - {i['salary_max'] if i['salary_max'] else ''} "
-          f"{i['currency']}")
+def search_salary(salary):
 
-for i in sj.find({'$or': [{'salary_min': {'$gte': salary}}, {'salary_max': {'$gte': salary}}]},
-                 {'name': 1, 'salary_min': 1, 'salary_max': 1, 'currency': 1, '_id': 0}):
+    for i in hh.find({'$or': [{'salary_min': {'$gte': salary}}, {'salary_max': {'$gte': salary}}]},
+                     {'name': 1, 'salary_min': 1, 'salary_max': 1, 'currency': 1, '_id': 0}):
 
-    print(f"{i['name']}: {i['salary_min'] if i['salary_min'] else ''} - {i['salary_max'] if i['salary_max'] else ''} "
-          f"{i['currency']}")
+        print(f"{i['name']}: {i['salary_min'] if i['salary_min'] else ''} - "
+              f"{i['salary_max'] if i['salary_max'] else ''} "
+              f"{i['currency']}")
+
+    for i in sj.find({'$or': [{'salary_min': {'$gte': salary}}, {'salary_max': {'$gte': salary}}]},
+                     {'name': 1, 'salary_min': 1, 'salary_max': 1, 'currency': 1, '_id': 0}):
+
+        print(f"{i['name']}: {i['salary_min'] if i['salary_min'] else ''} - "
+              f"{i['salary_max'] if i['salary_max'] else ''} "
+              f"{i['currency']}")
+
+
+search_salary(salary)
