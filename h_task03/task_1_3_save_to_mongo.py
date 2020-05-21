@@ -37,5 +37,22 @@ def insert_new(data):
             hh.insert_one(dat)
 
 
-insert_new(data)
+def insert_or_update(data, verbose=False):
+    for dat in data:
+        if dat['source'] == 'superjob.ru':
+            try:
+                sj.insert_one(dat)
+            except Exception as e:
+                if verbose:
+                    print(e)
+                sj.update_one({'_id': dat['_id']}, {'$set': dat})
+        if dat['source'] == 'superjob.ru':
+            try:
+                hh.insert_one(dat)
+            except Exception as e:
+                if verbose:
+                    print(e)
+                hh.update_one({'_id': dat['_id']}, {'$set': dat})
+
+insert_or_update(data)
 print(len(list(hh.find({}))))
