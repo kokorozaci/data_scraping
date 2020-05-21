@@ -37,6 +37,7 @@ def insert_new(data):
             hh.insert_one(dat)
 
 
+# На случай если информация в старой вакансии изменилась
 def insert_or_update(data, verbose=False):
     for dat in data:
         if dat['source'] == 'superjob.ru':
