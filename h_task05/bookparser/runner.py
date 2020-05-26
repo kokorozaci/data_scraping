@@ -12,5 +12,5 @@ if __name__ == '__main__':
     # answer = input('Введите вакансию')
 
     process.crawl(LabirintSpider, subject='программирование')
-    # process.crawl(Book24Spider, subject='программирование')
+    process.crawl(Book24Spider, subject='программирование')
     process.start()

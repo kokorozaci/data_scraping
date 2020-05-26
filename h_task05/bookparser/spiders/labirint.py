@@ -6,7 +6,7 @@ from bookparser.items import BookparserItem
 
 class LabirintSpider(scrapy.Spider):
     name = 'labirint'
-    allowed_domains = ['https://www.labirint.ru/']
+    allowed_domains = ['labirint.ru']
 
     def __init__(self, subject):
         self.start_urls = [
@@ -21,5 +21,15 @@ class LabirintSpider(scrapy.Spider):
 
     def book_parse(self, response:HtmlResponse):
         name = response.xpath("//h1/text()").extract_first()
-        price = response.xpath("//span[@class='buying-pricenew-val-number']/text()").extract()
-        yield BookparserItem(name=name, price=price)
+        link = response.url
+        base_price = response.xpath("//div[@class = 'buying-priceold-val']/span/text()").extract_first()
+        authors = response.xpath("//div[contains(text(), 'Автор:')]/a/text()").extract()
+        if not base_price:
+            price = response.xpath("//div[@class='buying-price-val']/span/text()").extract_first()
+        else:
+            price = response.xpath("//div[@class='buying-pricenew-val']/span/text()").extract_first()
+        rating = response.xpath("//div[@id='rate']/text()").extract_first()
+        currency = response.xpath("//span[@class='buying-pricenew-val-currency']/text()").extract_first()
+        yield BookparserItem(name=name, link=link, price=price,
+                             authors=authors, base_price=base_price,
+                             rating=rating, currency=currency)

@@ -21,5 +21,12 @@ class Book24Spider(scrapy.Spider):
 
     def book_parse(self, response:HtmlResponse):
         name = response.xpath("//h1/text()").extract_first()
+        link = response.url
+        base_price = response.xpath("//div[@class = 'item-actions__price-old']/text()").extract_first()
+        authors = response.xpath("//a[@class = 'item-tab__chars-link js-data-link']/text()").extract()
         price = response.xpath("//div[@class='item-actions__price']/b/text()").extract_first()
-        yield BookparserItem(name=name, price=price)
+        rating = response.xpath("//span[@class = 'rating__rate-value']/text()").extract_first()
+        currency = response.xpath("//div[@class='item-actions__price']/text()").extract_first()
+        yield BookparserItem(name=name, link=link, price=price,
+                             authors=authors, base_price=base_price,
+                             rating=rating, currency=currency)
