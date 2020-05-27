@@ -9,8 +9,8 @@ if __name__ == '__main__':
     crawler_settings = Settings()
     crawler_settings.setmodule(settings)
     process = CrawlerProcess(settings=crawler_settings)
-    # answer = input('Введите вакансию')
+    answer = input('Введите вакансию: ')
 
-    process.crawl(LabirintSpider, subject='программирование')
-    process.crawl(Book24Spider, subject='программирование')
+    process.crawl(LabirintSpider, subject=answer)
+    process.crawl(Book24Spider, subject=answer)
     process.start()
