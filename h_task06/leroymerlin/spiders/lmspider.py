@@ -25,7 +25,8 @@ class LmspiderSpider(scrapy.Spider):
         loader.add_xpath('name', '//h1/text()')
         loader.add_xpath('_id', "//span[@slot='article']/@content")
         loader.add_xpath('photo', "//source[@media=' only screen and (min-width: 1024px)']/@srcset")
-        loader.add_xpath('parameters', "//dl/div")
+        loader.add_xpath('key', "//dl/div//dt/text()")
+        loader.add_xpath('value', "//dl/div/dd/text()")
         loader.add_xpath('price', "//uc-pdp-price-view[@slot = 'primary-price']/span[@slot='price']/text() | "
                          "//uc-pdp-price-view[@slot = 'primary-price']/span[@slot='fract']/text()")
         loader.add_xpath('currency', "//uc-pdp-price-view[@slot = 'primary-price']/span[@slot='currency']/text()")

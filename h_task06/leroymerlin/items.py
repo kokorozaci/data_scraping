@@ -7,23 +7,19 @@
 
 from scrapy.loader.processors import TakeFirst, MapCompose
 import scrapy
-from lxml import html
 
 
 def to_int(num):
     return int(num)
 
-def params_to_dict(param):
-    key = html.fromstring(param).xpath('//dt/text()')[0]
-    value = html.fromstring(param).xpath('./dd/text()')[0]
-    value = ' '.join(list(filter(None, value.replace('\n', '').split(' '))))
-    if '.' in value:
-        value = float(value)
-    elif value.isdigit():
-        value = int(value)
-    params = {key: value}
-    return params
 
+def params_clear(text):
+    text = ' '.join(list(filter(None, text.replace('\n', '').split(' '))))
+    if '.' in text:
+        text = float(text)
+    elif text.isdigit():
+        text = int(text)
+    return text
 
 class LeroymerlinItem(scrapy.Item):
     # define the fields for your item here like:
@@ -31,12 +27,13 @@ class LeroymerlinItem(scrapy.Item):
     link = scrapy.Field(output_processor=TakeFirst())
     name = scrapy.Field(output_processor=TakeFirst())
     price = scrapy.Field()
-    unit_price = scrapy.Field()
     currency = scrapy.Field()
+    key = scrapy.Field(input_processor=MapCompose(params_clear))
+    value = scrapy.Field(input_processor=MapCompose(params_clear))
     unit = scrapy.Field()
+    parameters = scrapy.Field()
     second_price = scrapy.Field()
     second_unit = scrapy.Field()
     second_currency = scrapy.Field()
-    parameters = scrapy.Field(input_processor=MapCompose(params_to_dict))
     photo = scrapy.Field()
 

@@ -26,7 +26,7 @@ class LeroymerlinPhotoPipelines(ImagesPipeline):
         if item['photo']:
             for img in item['photo']:
                 try:
-                    yield scrapy.Request(img, meta=item)
+                    yield scrapy.Request(img, meta={'name': item['name']})
                 except Exception as e:
                     print(e)
 
@@ -51,10 +51,19 @@ class StringsProcessingPipelines:
         item['price'] = float('.'.join(item['price']).replace(' ', ''))
         item['unit'] = ' '.join(item['unit'])
         item['currency'] = ' '.join(item['currency'])
+        item['price'] = {'value': item['price'],
+                         'unit': item['unit'],
+                         'currency': item['currency']}
         if 'second_price' in item:
             item['second_price'] = float('.'.join(item['second_price']).replace(' ', ''))
             item['second_unit'] = ' '.join(item['second_unit'])
             item['second_currency'] = ' '.join(item['second_currency'])
+            item['second_price'] = {'value': item['second_price'],
+                                    'unit': item['second_unit'],
+                                    'currency': item['second_currency']}
+        item['parameters'] = {key:value for key, value in zip(item['key'], item['value'])}
+        keys = ['key', 'value', 'unit', 'currency', 'second_unit', 'second_currency']
+        [item.pop(k, None) for k in keys]
         return item
 
 
