@@ -6,10 +6,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from pymongo import MongoClient
 from time import sleep
+import json
 
 chrome_options = Options()
 chrome_options.add_argument('start-maximized')
-
 
 driver = webdriver.Chrome(options=chrome_options)
 
@@ -31,9 +31,12 @@ hit = driver.find_elements_by_class_name('sel-hits-block')[1]
 products = hit.find_elements_by_class_name('gallery-list-item')
 
 for i in products:
-    link = i.find_element_by_tag_name('a').get_attribute('href')
-    name = i.find_element_by_tag_name('a').get_attribute('data-track-label')
-    data = i.find_element_by_tag_name('a').get_attribute('data-product-info').replace('\n', '').replace('\n', '')
-    collection.insert_one({'link': link, 'name': name, 'data': data})
+    data = json.loads(i.find_element_by_tag_name('a') \
+                      .get_attribute('data-product-info') \
+                      .replace('\n', '') \
+                      .replace('\n', ''))
+    data['_id'] = data['productId']
+    data['link'] = i.find_element_by_tag_name('a').get_attribute('href')
+    collection.update({'_id': data['_id']}, data, True)
 
 driver.quit()
