@@ -12,10 +12,8 @@ class InstagramSpider(scrapy.Spider):
     name = 'instagram'
     allowed_domains = ['instagram.com']
     start_urls = ['https://instagram.com/']
-    insta_login = 'fashion.search.trends'
-        # 'onliskill_udm'
-    insta_pass = '#PWD_INSTAGRAM_BROWSER:10:1591461585:AcxQAF/e0cUlN3YpzOCIaolSueXsoCAe2Q/jYfwpevq+gNgB8HjonKfFue8k58O393nX8y80hVd0M6ILGmAwJmAUqyWdHpJ/Crr6eGcManKhGrUD370fNvo8ZZrhHLZrWqzzq9zs4SQwVb/w'
-        # '#PWD_INSTAGRAM_BROWSER:10:1591291623:AeZQANjUYQQHAtsDlsZWqwjk1fmzZlqXoSBP77giDsKyGd0hzUC4A4SGhA7u91hdjOsVYP2orQiwNlNRBlOQRwVVUZRsQXgrmcOf3r38LIIljjOGk4Cq8yO7B7sdzHVPOMgJSkKNbFBGWZmv'
+    insta_login = ''
+    insta_pass = ''
     inst_login_link = 'https://instagram.com/accounts/login/ajax/'
 
     hash_posts = '7c8a1055f69ff97dc201e752cf6f0093'
